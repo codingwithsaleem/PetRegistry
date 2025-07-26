@@ -246,7 +246,7 @@ export const AnimalFormModal = ({
 
   return (
     <Dialog open={open} onOpenChange={handleModalClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="md:max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Edit" : "Add New"} {modalType === 'cat' ? 'Cat' : 'Dog'} Registration

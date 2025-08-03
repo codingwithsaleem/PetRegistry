@@ -137,10 +137,15 @@ export function VerifyUserForm({
     try {
       // Set loading state
       dispatch(setLoading(true))
+
+      const verificationData = {
+        otp: data.otp,
+        email: userEmail, // Include email for verification
+      }
       
       // Call auth service directly
-      const response = await authService.verifyUser(data)
-      
+      const response = await authService.verifyUser(verificationData)
+
       if (response.success) {
         // Clear stored email after successful verification
         localStorage.removeItem('userEmail')

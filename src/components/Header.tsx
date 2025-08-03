@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Bell,
   ChevronDown,
@@ -27,6 +27,10 @@ import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/ModeToggle";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/store/hooks";
+import { authService, ApiErrorHandler } from "@/lib/services";
+import { logout, setLoading, setError } from "@/store/slices/userSlice";
+import { toast } from "sonner";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: "🏠" },
@@ -44,12 +48,35 @@ const userMenuItems = [
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const notifications = 3; // Mock notification count
 
-  const handleSignOut = () => {
-    // Handle sign out logic here
-    console.log("Sign out");
+  const handleSignOut = async () => {
+    try {
+      // Set loading state
+      dispatch(setLoading(true));
+      
+      // Call auth service directly
+      const response = await authService.logout();
+      
+      if (response.success) {
+        // Dispatch logout action to clear Redux state
+        dispatch(logout());
+        
+        toast.success("Logged out successfully!");
+        router.push("/login");
+      } else {
+        dispatch(setError(response.message || 'Logout failed'));
+      }
+    } catch (error) {
+      const errorMessage = ApiErrorHandler.getErrorMessage(error);
+      dispatch(setError(errorMessage));
+      toast.error("Logout failed. Please try again.");
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   return (

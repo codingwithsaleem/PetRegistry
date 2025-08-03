@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation"
 import { useAppDispatch, useAuth } from "@/store/hooks"
 import { authService, ApiErrorHandler } from "@/lib/services"
 import { setLoading, setError, clearError, loginSuccess } from "@/store/slices/userSlice"
+import { ButtonLoader } from "@/components/ui/loader"
 import { useEffect } from "react"
 
 /**
@@ -166,7 +167,7 @@ export function LoginForm({
                   className="w-full" 
                   disabled={isLoading}
                 >
-                  {isLoading ? "Signing in..." : "Login"}
+                  {isLoading ? <ButtonLoader /> : "Login"}
                 </Button>
                 <Button 
                   variant="outline" 

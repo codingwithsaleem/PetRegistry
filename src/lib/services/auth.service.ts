@@ -10,6 +10,7 @@ import {
   ResetPasswordRequest,
   RefreshTokenRequest,
 } from './types'
+import { setAuthCookies, clearAuthCookies } from '@/lib/utils/cookies'
 
 class AuthService {
   private readonly basePath = '/auth'
@@ -44,9 +45,13 @@ class AuthService {
       const { tokens, user } = response.data.data
       
       if (typeof window !== 'undefined') {
+        // Store in localStorage
         localStorage.setItem('accessToken', tokens.accessToken)
         localStorage.setItem('refreshToken', tokens.refreshToken)
         localStorage.setItem('user', JSON.stringify(user))
+        
+        // Also store in cookies for server-side access
+        setAuthCookies(tokens)
       }
     }
     
@@ -105,8 +110,12 @@ class AuthService {
       const { tokens } = response.data.data
       
       if (typeof window !== 'undefined') {
+        // Update localStorage
         localStorage.setItem('accessToken', tokens.accessToken)
         localStorage.setItem('refreshToken', tokens.refreshToken)
+        
+        // Update cookies
+        setAuthCookies(tokens)
       }
     }
     
@@ -125,6 +134,9 @@ class AuthService {
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('user')
+      
+      // Clear cookies
+      clearAuthCookies()
     }
     
     return response.data

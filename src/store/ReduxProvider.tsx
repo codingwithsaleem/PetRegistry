@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './index'
 import { restoreUser } from './slices/userSlice'
+import { AppLoader } from '@/components/ui/loader'
 
 /**
  * Store Initializer Component
@@ -20,21 +21,6 @@ const StoreInitializer: React.FC<{ children: React.ReactNode }> = ({ children })
 }
 
 /**
- * Loading Component
- * Displayed while Redux Persist is rehydrating the store
- */
-const PersistLoader: React.FC = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="text-center">
-        <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto"></div>
-        <p className="text-gray-600">Loading application...</p>
-      </div>
-    </div>
-  )
-}
-
-/**
  * Redux Provider Component
  * Wraps the entire app with Redux store and persistence
  * 
@@ -45,7 +31,7 @@ const PersistLoader: React.FC = () => {
 export const ReduxProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Provider store={store}>
-      <PersistGate loading={<PersistLoader />} persistor={persistor}>
+      <PersistGate loading={<AppLoader />} persistor={persistor}>
         <StoreInitializer>
           {children}
         </StoreInitializer>

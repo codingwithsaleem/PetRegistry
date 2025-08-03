@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Bell,
   ChevronDown,
   LogOut,
   Menu,
@@ -27,7 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/ModeToggle";
 import { cn } from "@/lib/utils";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAuth } from "@/store/hooks";
 import { authService, ApiErrorHandler } from "@/lib/services";
 import { logout, setLoading, setError } from "@/store/slices/userSlice";
 import { toast } from "sonner";
@@ -50,8 +49,7 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
-
-  const notifications = 3; // Mock notification count
+  const { user, isLoading } = useAuth();
 
   const handleSignOut = async () => {
     try {
@@ -154,68 +152,6 @@ export function Header() {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-2">
-            {/* Notifications */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="relative">
-                  <Bell className="h-5 w-5" />
-                  {notifications > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs"
-                    >
-                      {notifications}
-                    </Badge>
-                  )}
-                  <span className="sr-only">Notifications</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
-                <DropdownMenuLabel className="flex items-center justify-between">
-                  Notifications
-                  <Badge variant="secondary" className="h-5 text-xs">
-                    {notifications}
-                  </Badge>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <div className="max-h-64 overflow-y-auto">
-                  <DropdownMenuItem className="flex flex-col items-start gap-1 p-4">
-                    <div className="flex w-full items-center justify-between">
-                      <span className="font-medium">New dog registration</span>
-                      <span className="text-xs text-muted-foreground">2h ago</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Max (Golden Retriever) has been registered by John Smith
-                    </p>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="flex flex-col items-start gap-1 p-4">
-                    <div className="flex w-full items-center justify-between">
-                      <span className="font-medium">Vaccination reminder</span>
-                      <span className="text-xs text-muted-foreground">5h ago</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      3 animals have vaccinations due this week
-                    </p>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="flex flex-col items-start gap-1 p-4">
-                    <div className="flex w-full items-center justify-between">
-                      <span className="font-medium">License renewal</span>
-                      <span className="text-xs text-muted-foreground">1d ago</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      15 licenses will expire next month
-                    </p>
-                  </DropdownMenuItem>
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-center">
-                  <Link href="/notifications" className="w-full text-sm">
-                    View all notifications
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
             {/* Theme Toggle */}
             <ModeToggle />
 
@@ -224,12 +160,17 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-2 px-2">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="/api/placeholder/32/32" alt="User" />
-                    <AvatarFallback>AD</AvatarFallback>
+                    <AvatarImage src="/api/placeholder/32/32" alt={user?.fullName || 'User'} />
+                    <AvatarFallback>
+                      {user?.fullName 
+                        ? user.fullName.split(' ').map(name => name[0]).join('').slice(0, 2).toUpperCase()
+                        : 'U'
+                      }
+                    </AvatarFallback>
                   </Avatar>
                   <div className="hidden md:block text-left">
-                    <p className="text-sm font-medium">Admin User</p>
-                    <p className="text-xs text-muted-foreground">admin@petregistry.com</p>
+                    <p className="text-sm font-medium">{user?.fullName || 'User'}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email || 'user@example.com'}</p>
                   </div>
                   <ChevronDown className="h-4 w-4" />
                 </Button>
@@ -237,8 +178,8 @@ export function Header() {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">Admin User</p>
-                    <p className="text-xs text-muted-foreground">admin@petregistry.com</p>
+                    <p className="text-sm font-medium">{user?.fullName || 'User'}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email || 'user@example.com'}</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -255,9 +196,13 @@ export function Header() {
                   </DropdownMenuItem>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut} className="text-red-600 focus:text-red-600">
+                <DropdownMenuItem 
+                  onClick={handleSignOut} 
+                  className="text-red-600 focus:text-red-600"
+                  disabled={isLoading}
+                >
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sign out
+                  {isLoading ? 'Signing out...' : 'Sign out'}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

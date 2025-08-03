@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { User } from '@/lib/services/types'
+import { setAuthCookies, clearAuthCookies } from '@/lib/utils/cookies'
 
 /**
  * User State Interface
@@ -107,6 +108,9 @@ const userSlice = createSlice({
         localStorage.setItem('user', JSON.stringify(user))
         localStorage.setItem('accessToken', tokens.accessToken)
         localStorage.setItem('refreshToken', tokens.refreshToken)
+        
+        // Also store in cookies for server-side access
+        setAuthCookies(tokens)
       }
     },
 
@@ -126,6 +130,9 @@ const userSlice = createSlice({
       if (typeof window !== 'undefined') {
         localStorage.setItem('accessToken', action.payload.accessToken)
         localStorage.setItem('refreshToken', action.payload.refreshToken)
+        
+        // Update cookies
+        setAuthCookies(action.payload)
       }
     },
 
@@ -163,6 +170,9 @@ const userSlice = createSlice({
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
         localStorage.removeItem('user')
+        
+        // Clear cookies
+        clearAuthCookies()
       }
     },
 

@@ -187,8 +187,8 @@ export function VerifyForgotPasswordForm({
       setResendTimer(60)
 
       // Call auth service directly
-      const response = await authService.resendVerificationOtp({ email: userEmail })
-      
+      const response = await authService.resendVerificationOtp({ email: userEmail , type: "password_reset" })
+
       if (response.success) {
         toast.success("New OTP sent to your email!")
       } else {

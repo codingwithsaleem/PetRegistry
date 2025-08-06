@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
@@ -148,9 +149,9 @@ export function LoginForm({
                     Forgot your password?
                   </Link>
                 </div>
-                <Input 
+                <PasswordInput 
                   id="password" 
-                  type="password" 
+                  placeholder="Enter your password"
                   {...register("password")}
                   className={errors.password ? "border-red-500" : ""}
                   disabled={isLoading}

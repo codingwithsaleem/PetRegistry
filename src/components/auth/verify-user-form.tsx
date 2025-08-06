@@ -189,7 +189,7 @@ export function VerifyUserForm({
       setResendTimer(60)
 
       // Call auth service directly
-      const response = await authService.resendVerificationOtp({ email: userEmail })
+      const response = await authService.resendVerificationOtp({ email: userEmail , type: "verification" })
       
       if (response.success) {
         toast.success("New OTP sent to your email!")

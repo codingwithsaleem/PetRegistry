@@ -86,3 +86,9 @@ export interface ResetPasswordRequest {
 export interface RefreshTokenRequest {
   refreshToken: string
 }
+
+
+export interface ResendVerificationOtpRequest {
+  email: string
+  type: "verification" | "password_reset"
+}

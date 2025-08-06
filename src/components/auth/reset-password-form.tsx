@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -77,6 +78,7 @@ export function ResetPasswordForm({
       dispatch(setLoading(true))
 
       const resetData = {
+        email: localStorage.getItem('userEmail') || '',
         newPassword: data.newPassword
       }
       
@@ -114,22 +116,9 @@ export function ResetPasswordForm({
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="newPassword">New Password</Label>
-                <Input
+                <PasswordInput
                   id="newPassword"
-                  type="password"
-                  {...register("newPassword")}
-                  className={errors.newPassword ? "border-red-500" : ""}
-                />
-                {errors.newPassword && (
-                  <p className="text-sm text-red-500">{errors.newPassword.message}</p>
-                )}
-              </div>
-
-              <div className="grid gap-3">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
+                  placeholder="Enter your new password"
                   {...register("newPassword")}
                   className={errors.newPassword ? "border-red-500" : ""}
                   disabled={isLoading}
@@ -142,9 +131,9 @@ export function ResetPasswordForm({
               {/* Confirm Password Field */}
               <div className="grid gap-3">
                 <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input
+                <PasswordInput
                   id="confirmPassword"
-                  type="password"
+                  placeholder="Confirm your new password"
                   {...register("confirmPassword")}
                   className={errors.confirmPassword ? "border-red-500" : ""}
                   disabled={isLoading}

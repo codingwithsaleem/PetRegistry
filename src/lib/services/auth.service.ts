@@ -9,6 +9,7 @@ import {
   VerifyOtpRequest,
   ResetPasswordRequest,
   RefreshTokenRequest,
+  ResendVerificationOtpRequest
 } from './types'
 import { setAuthCookies, clearAuthCookies } from '@/lib/utils/cookies'
 
@@ -93,7 +94,7 @@ class AuthService {
    * Resend verification OTP
    * POST /auth/resend-verification-otp
    */
-  async resendVerificationOtp(data: ForgotPasswordRequest): Promise<ApiResponse> {
+  async resendVerificationOtp(data: ResendVerificationOtpRequest): Promise<ApiResponse> {
     const response = await apiClient.post(`${this.basePath}/resend-verification-otp`, data)
     return response.data
   }

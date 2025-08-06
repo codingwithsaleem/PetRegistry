@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -173,9 +174,9 @@ export function SignupForm({
 
               <div className="grid gap-3">
                 <Label htmlFor="password">Password</Label>
-                <Input
+                <PasswordInput
                   id="password"
-                  type="password"
+                  placeholder="Enter your password"
                   {...register("password")}
                   className={errors.password ? "border-red-500" : ""}
                 />
@@ -188,9 +189,9 @@ export function SignupForm({
 
               <div className="grid gap-3">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input
+                <PasswordInput
                   id="confirmPassword"
-                  type="password"
+                  placeholder="Confirm your password"
                   {...register("confirmPassword")}
                   className={errors.confirmPassword ? "border-red-500" : ""}
                 />

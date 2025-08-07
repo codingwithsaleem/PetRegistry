@@ -194,6 +194,7 @@ const userSlice = createSlice({
             state.tokens.accessToken = accessToken
             state.tokens.refreshToken = refreshToken
           } catch (error) {
+            console.error("Failed to parse user data from localStorage:", error)
             // If parsing fails, clear invalid data
             localStorage.removeItem('user')
             localStorage.removeItem('accessToken')

@@ -1,7 +1,6 @@
 // Redux Store Exports
 export * from './hooks'
 export * from './slices/userSlice'
-export * from './slices/userActions'
 export { store, persistor, type RootState, type AppDispatch } from './index'
 
 // Commonly used exports for convenience
@@ -13,17 +12,7 @@ export {
   useUser,
 } from './hooks'
 
-export {
-  // Actions
-  loginUser,
-  registerUser,
-  verifyUser,
-  forgotPassword,
-  verifyForgotPasswordOtp,
-  resetPassword,
-  resendVerificationOtp,
-  logoutUser,
-} from './slices/userActions'
+
 
 export {
   // Sync Actions

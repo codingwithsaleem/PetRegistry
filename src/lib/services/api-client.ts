@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 
 // Base API configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6001/api/v1'
@@ -67,6 +67,7 @@ apiClient.interceptors.response.use(
         }
       } catch (refreshError) {
         // Refresh failed, redirect to login
+        console.error("Token refresh failed:", refreshError)
         if (typeof window !== 'undefined') {
           localStorage.removeItem('accessToken')
           localStorage.removeItem('refreshToken')

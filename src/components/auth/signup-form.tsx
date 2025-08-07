@@ -47,7 +47,7 @@ export function SignupForm({
   ...props
 }: React.ComponentProps<"div">) {
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAuth();
+  const {  error } = useAuth();
   const router = useRouter();
 
   /**
